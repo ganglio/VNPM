@@ -18,6 +18,17 @@ Usage
 5. Visit [http://localhost:8080/phpmyadmin](http://localhost:8080/phpmyadmin) for phpmyadmin
 6. SSH to localhost:2222 (or just do "vagrant ssh" if you have a decent host machine like Linux)
 
+MySQL Configuration
+-------------------
+
+The MySQL server is accessible from your PHP code using both the unix
+file socket at */var/run/mysqld/mysqld.sock* or using the port *3306*
+
+The default login details for the MySQL root user are:
+
+Username: *vagrant*
+Password: *vagrant*
+
 Hints
 -----
 
