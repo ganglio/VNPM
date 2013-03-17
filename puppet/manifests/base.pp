@@ -66,9 +66,10 @@ service { 'php5-fpm':
 
 # And now we configure
 
-exec { "create-db-schema-and-user":
+exec { "create-db-user":
+	unless  => "/usr/bin/mysqladmin -uvagrant -pvagrant status",
 	command => "/usr/bin/mysql -uroot -p -e \"create user vagrant@'localhost' identified by 'vagrant'; grant all on *.* to vagrant@'localhost'; flush privileges;\"",
-	require => Service["mysql"]
+	require => Service["mysql"],
 }
 
 file { 'vagrant-nginx':

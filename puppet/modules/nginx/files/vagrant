@@ -7,6 +7,8 @@ server {
 
 	location / {
 		autoindex on;
+		expires off;
+		sendfile off;
 	}
 
 	location ~ \.php$ {
