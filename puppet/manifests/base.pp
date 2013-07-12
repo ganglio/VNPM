@@ -28,6 +28,16 @@ package { 'php5-fpm':
 	require => Exec['apt-get update'],
 }
 
+package { 'php5-dev':
+	ensure  => present,
+	require => Exec['apt-get update'],
+}
+
+package { 'php-pear':
+	ensure  => present,
+	require => Exec['apt-get update'],
+}
+
 package { 'php5-mysql':
 	ensure  => present,
 	require => [
@@ -35,6 +45,11 @@ package { 'php5-mysql':
 		Package['php5-fpm'],
 		Package['mysql-server'],
 	],
+}
+
+package { 'mongodb-clients':
+	ensure => present,
+	require => Exec['apt-get update'],
 }
 
 package { 'phpmyadmin':
@@ -110,4 +125,26 @@ file { 'vagrant-nginx-enable':
 		File['vagrant-nginx'],
 		File['default-nginx-disable'],
 	],
+}
+
+exec { 'Install php-mongo extension':
+	command => '/usr/bin/pecl install mongo',
+	unless => '/usr/bin/pecl list mongo',
+	notify  => Service['php5-fpm'],
+	require => [
+		Package["php5-dev"],
+		Package["php-pear"],
+	],
+}
+
+file { 'php5-fpm mongo conf':
+	path    => '/etc/php5/conf.d/mongo.ini',
+	ensure  => file,
+	replace => true,
+	notify  => Service['php5-fpm'],
+	require => [
+		Package['php5-fpm'],
+		Exec['Install php-mongo extension'],
+	],
+	source => 'puppet:///modules/php5-mongo/mongo.ini',
 }
