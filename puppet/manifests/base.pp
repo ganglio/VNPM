@@ -2,8 +2,21 @@ group { 'puppet':
 	ensure => present,
 }
 
+exec { '10gen apt-key':
+	command => '/usr/bin/apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10',
+}
+
+file { '10gen.list':
+	path    => '/etc/apt/sources.list.d/10gen.list',
+	ensure  => file,
+	replace => true,
+	source  => 'puppet:///modules/apt/10gen.list',
+	require => Exec['10gen apt-key'],
+}
+
 exec { 'apt-get update':
 	command => '/usr/bin/apt-get update',
+	require => File['10gen.list']
 }
 
 # Let's install some packages
@@ -47,8 +60,8 @@ package { 'php5-mysql':
 	],
 }
 
-package { 'mongodb-clients':
-	ensure => present,
+package { 'mongodb-10gen':
+	ensure  => present,
 	require => Exec['apt-get update'],
 }
 
