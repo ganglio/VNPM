@@ -75,6 +75,11 @@ package { 'phpmyadmin':
 	],
 }
 
+package { 'make':
+	ensure => present,
+	require => Exec['apt-get update'],
+}
+
 # Let's start some services
 
 service { 'nginx':
@@ -147,6 +152,7 @@ exec { 'Install php-mongo extension':
 	require => [
 		Package["php5-dev"],
 		Package["php-pear"],
+    Package["make"],
 	],
 }
 
