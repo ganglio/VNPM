@@ -1,3 +1,5 @@
 .DS_Store
 .vagrant
 .vagrant.v1.*
+htdocs/**
+!htdocs/.gitkeep
