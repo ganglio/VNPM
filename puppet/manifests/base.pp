@@ -26,7 +26,7 @@ package { 'vim':
 	require => Exec['apt-get update'],
 }
 
-package { 'nginx': 
+package { 'nginx':
 	ensure  => present,
 	require => Exec['apt-get update'],
 }
@@ -114,6 +114,51 @@ file { 'vagrant-nginx':
 	notify  => Service['nginx'],
 }
 
+file { 'vagrant-ffxivhwea':
+	path    => '/etc/nginx/sites-available/ffxivhwea',
+	ensure  => file,
+	replace => true,
+	require => Package['nginx'],
+	source  => 'puppet:///modules/nginx/ffxivhwea',
+	notify  => Service['nginx'],
+}
+
+file { 'vagrant-survey':
+	path    => '/etc/nginx/sites-available/survey',
+	ensure  => file,
+	replace => true,
+	require => Package['nginx'],
+	source  => 'puppet:///modules/nginx/survey',
+	notify  => Service['nginx'],
+}
+
+file { 'vagrant-vqa':
+	path    => '/etc/nginx/sites-available/vqa',
+	ensure  => file,
+	replace => true,
+	require => Package['nginx'],
+	source  => 'puppet:///modules/nginx/vqa',
+	notify  => Service['nginx'],
+}
+
+file { 'vagrant-seweb':
+	path    => '/etc/nginx/sites-available/seweb',
+	ensure  => file,
+	replace => true,
+	require => Package['nginx'],
+	source  => 'puppet:///modules/nginx/seweb',
+	notify  => Service['nginx'],
+}
+
+
+file { 'vagrant-certs':
+	path    => '/etc/nginx/certs',
+	ensure  => file,
+	recurse => remote,
+	source  => 'puppet:///modules/nginx/certs',
+	notify  => Service['nginx'],
+}
+
 file { 'phpmyadmin-config':
 	path    => '/usr/share/phpmyadmin/config.inc.php',
 	ensure  => file,
@@ -137,6 +182,50 @@ file { 'default-nginx-disable':
 file { 'vagrant-nginx-enable':
 	path    => '/etc/nginx/sites-enabled/vagrant',
 	target  => '/etc/nginx/sites-available/vagrant',
+	ensure  => link,
+	notify  => Service['nginx'],
+	require => [
+		File['vagrant-nginx'],
+		File['default-nginx-disable'],
+	],
+}
+
+file { 'vagrant-nginx-ffxivhwea':
+	path    => '/etc/nginx/sites-enabled/ffxivhwea',
+	target  => '/etc/nginx/sites-available/ffxivhwea',
+	ensure  => link,
+	notify  => Service['nginx'],
+	require => [
+		File['vagrant-nginx'],
+		File['default-nginx-disable'],
+	],
+}
+
+file { 'vagrant-nginx-survey':
+	path    => '/etc/nginx/sites-enabled/survey',
+	target  => '/etc/nginx/sites-available/survey',
+	ensure  => link,
+	notify  => Service['nginx'],
+	require => [
+		File['vagrant-nginx'],
+		File['default-nginx-disable'],
+	],
+}
+
+file { 'vagrant-nginx-seweb':
+	path    => '/etc/nginx/sites-enabled/seweb',
+	target  => '/etc/nginx/sites-available/seweb',
+	ensure  => link,
+	notify  => Service['nginx'],
+	require => [
+		File['vagrant-nginx'],
+		File['default-nginx-disable'],
+	],
+}
+
+file { 'vagrant-nginx-vqa':
+	path    => '/etc/nginx/sites-enabled/vqa',
+	target  => '/etc/nginx/sites-available/vqa',
 	ensure  => link,
 	notify  => Service['nginx'],
 	require => [
