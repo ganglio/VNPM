@@ -6,8 +6,8 @@ class nginx {
 
 	file { 'vagrant sites':
 		path    => '/etc/nginx/sites-enabled',
-		ensure  => directory,
-		replace => true,
+		recurse => "remote",
+		ensure  => file,
 		require => Package['nginx'],
 		source  => 'puppet:///modules/nginx/sites',
 		notify  => Service['nginx'],
