@@ -4,7 +4,7 @@ class nginx {
 		require => Exec['apt-get update'],
 	}
 
-	file { 'vagrant sites':
+	file { 'sites':
 		path    => '/etc/nginx/sites-enabled',
 		recurse => "remote",
 		ensure  => file,
@@ -13,7 +13,7 @@ class nginx {
 		notify  => Service['nginx'],
 	}
 
-	file { 'vagrant-certs':
+	file { 'certs':
 		path    => '/etc/nginx/certs',
 		ensure  => file,
 		recurse => remote,
