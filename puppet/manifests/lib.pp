@@ -11,3 +11,8 @@ package { 'make':
 	ensure => present,
 	require => Exec['apt-get update'],
 }
+
+package { 'language-pack-en':
+	ensure => present,
+	require => Exec['apt-get update'],
+}

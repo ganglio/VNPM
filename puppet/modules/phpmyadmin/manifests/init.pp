@@ -20,7 +20,7 @@ class phpmyadmin {
 	}
 
 	file { 'phpmyadmin-config':
-		path    => '/usr/share/phpmyadmin/config.inc.php',
+		path    => '/etc/phpmyadmin/config.inc.php',
 		ensure  => file,
 		replace => true,
 		require => [

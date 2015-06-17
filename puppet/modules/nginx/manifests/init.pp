@@ -13,6 +13,11 @@ class nginx {
 		notify  => Service['nginx'],
 	}
 
+	file { 'logs permissions':
+		path    => '/var/log/nginx',
+		mode    => 777
+	}
+
 	file { 'certs':
 		path    => '/etc/nginx/certs',
 		ensure  => file,

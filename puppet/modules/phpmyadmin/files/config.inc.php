@@ -1,62 +1,82 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
- * phpMyAdmin sample configuration, you can use it as base for
- * manual configuration. For easier setup you can use setup/
+ * Debian local configuration file
  *
- * All directives are explained in Documentation.html and on phpMyAdmin
- * wiki <http://wiki.phpmyadmin.net>.
+ * This file overrides the settings made by phpMyAdmin interactive setup
+ * utility.
  *
- * @package phpMyAdmin
+ * For example configuration see
+ *   /usr/share/doc/phpmyadmin/examples/config.sample.inc.php
+ * or
+ *   /usr/share/doc/phpmyadmin/examples/config.manyhosts.inc.php
+ *
+ * NOTE: do not add security sensitive data to this file (like passwords)
+ * unless you really know what you're doing. If you do, any user that can
+ * run PHP or CGI on your webserver will be able to read them. If you still
+ * want to do this, make sure to properly secure the access to this file
+ * (also on the filesystem level).
  */
 
-/*
- * This is needed for cookie based authentication to encrypt password in
- * cookie
- */
-$cfg['blowfish_secret'] = ''; /* YOU MUST FILL IN THIS FOR COOKIE AUTH! */
+if (!function_exists('check_file_access')) {
+	function check_file_access($path)
+	{
+	    if (is_readable($path)) {
+		return true;
+	    } else {
+		error_log(
+		    'phpmyadmin: Failed to load ' . $path
+		    . ' Check group www-data has read access and open_basedir restrictions.'
+		);
+		return false;
+	    }
+	}
+}
 
-/*
- * Servers configuration
+$cfg['blowfish_secret'] = 'ba17c1ec07d65003';
+
+/**
+ * Server(s) configuration
  */
 $i = 0;
-
-/*
- * First server
- */
+// The $cfg['Servers'] array starts with $cfg['Servers'][1].  Do not use $cfg['Servers'][0].
+// You can disable a server config entry by setting host to ''.
 $i++;
+
+/**
+ * Read configuration from dbconfig-common
+ * You can regenerate it using: dpkg-reconfigure -plow phpmyadmin
+ */
+// if (check_file_access('/etc/phpmyadmin/config-db.php')) {
+//     require('/etc/phpmyadmin/config-db.php');
+// }
+
 /* Authentication type */
 $cfg['Servers'][$i]['auth_type'] = 'cookie';
 /* Server parameters */
 $cfg['Servers'][$i]['host'] = 'localhost';
 $cfg['Servers'][$i]['connect_type'] = 'tcp';
 $cfg['Servers'][$i]['compress'] = false;
-/* Select mysql if your server does not have mysqli */
-$cfg['Servers'][$i]['extension'] = 'mysql';
-$cfg['Servers'][$i]['AllowNoPassword'] = false;
-
-/*
- * phpMyAdmin configuration storage settings.
- */
-
-/* User used to manipulate with storage */
-// $cfg['Servers'][$i]['controluser'] = 'pma';
-// $cfg['Servers'][$i]['controlpass'] = 'pmapass';
+/* Select mysqli if your server has it */
+$cfg['Servers'][$i]['extension'] = 'mysqli';
+/* Optional: User for advanced features */
+$cfg['Servers'][$i]['controluser'] = 'vagrant';
+$cfg['Servers'][$i]['controlpass'] = 'vagrant';
 
 /* Storage database and tables */
-// $cfg['Servers'][$i]['pmadb'] = 'phpmyadmin';
-// $cfg['Servers'][$i]['bookmarktable'] = 'pma_bookmark';
-// $cfg['Servers'][$i]['relation'] = 'pma_relation';
-// $cfg['Servers'][$i]['table_info'] = 'pma_table_info';
-// $cfg['Servers'][$i]['table_coords'] = 'pma_table_coords';
-// $cfg['Servers'][$i]['pdf_pages'] = 'pma_pdf_pages';
-// $cfg['Servers'][$i]['column_info'] = 'pma_column_info';
-// $cfg['Servers'][$i]['history'] = 'pma_history';
-// $cfg['Servers'][$i]['tracking'] = 'pma_tracking';
-// $cfg['Servers'][$i]['designer_coords'] = 'pma_designer_coords';
-// $cfg['Servers'][$i]['userconfig'] = 'pma_userconfig';
-/* Contrib / Swekey authentication */
-// $cfg['Servers'][$i]['auth_swekey_config'] = '/etc/swekey-pma.conf';
+$cfg['Servers'][$i]['pmadb'] = 'phpmyadmin';
+$cfg['Servers'][$i]['bookmarktable'] = 'pma_bookmark';
+$cfg['Servers'][$i]['relation'] = 'pma_relation';
+$cfg['Servers'][$i]['table_info'] = 'pma_table_info';
+$cfg['Servers'][$i]['table_coords'] = 'pma_table_coords';
+$cfg['Servers'][$i]['pdf_pages'] = 'pma_pdf_pages';
+$cfg['Servers'][$i]['column_info'] = 'pma_column_info';
+$cfg['Servers'][$i]['history'] = 'pma_history';
+$cfg['Servers'][$i]['table_uiprefs'] = 'pma_table_uiprefs';
+$cfg['Servers'][$i]['tracking'] = 'pma_tracking';
+$cfg['Servers'][$i]['designer_coords'] = 'pma_designer_coords';
+$cfg['Servers'][$i]['userconfig'] = 'pma_userconfig';
+$cfg['Servers'][$i]['recent'] = 'pma_recent';
+$cfg['Servers'][$i]['AllowNoPassword'] = FALSE;
 
 /*
  * End of servers configuration
@@ -68,76 +88,10 @@ $cfg['Servers'][$i]['AllowNoPassword'] = false;
 $cfg['UploadDir'] = '';
 $cfg['SaveDir'] = '';
 
-/**
- * Defines whether a user should be displayed a "show all (records)"
- * button in browse mode or not.
- * default = false
- */
-//$cfg['ShowAll'] = true;
-
-/**
- * Number of rows displayed when browsing a result set. If the result
- * set contains more rows, "Previous" and "Next".
- * default = 30
- */
-//$cfg['MaxRows'] = 50;
-
-/**
- * Use graphically less intense menu tabs
- * default = false
- */
-//$cfg['LightTabs'] = true;
-
-/**
- * disallow editing of binary fields
- * valid values are:
- *   false  allow editing
- *   'blob' allow editing except for BLOB fields
- *   'all'  disallow editing
- * default = blob
- */
-//$cfg['ProtectBinary'] = 'false';
-
-/**
- * Default language to use, if not browser-defined or user-defined
- * (you find all languages in the locale folder)
- * uncomment the desired line:
- * default = 'en'
- */
-//$cfg['DefaultLang'] = 'en';
-//$cfg['DefaultLang'] = 'de';
-
-/**
- * default display direction (horizontal|vertical|horizontalflipped)
- */
-//$cfg['DefaultDisplay'] = 'vertical';
+/* Support additional configurations */
+foreach (glob('/etc/phpmyadmin/conf.d/*.php') as $filename)
+{
+    include($filename);
+}
 
 
-/**
- * How many columns should be used for table display of a database?
- * (a value larger than 1 results in some information being hidden)
- * default = 1
- */
-//$cfg['PropertiesNumColumns'] = 2;
-
-/**
- * Set to true if you want DB-based query history.If false, this utilizes
- * JS-routines to display query history (lost by window close)
- *
- * This requires configuration storage enabled, see above.
- * default = false
- */
-//$cfg['QueryHistoryDB'] = true;
-
-/**
- * When using DB-based query history, how many entries should be kept?
- *
- * default = 25
- */
-//$cfg['QueryHistoryMax'] = 100;
-
-/*
- * You can find more configuration options in Documentation.html
- * or here: http://wiki.phpmyadmin.net/pma/Config
- */
-?>
