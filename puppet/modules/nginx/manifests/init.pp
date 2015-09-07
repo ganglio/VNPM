@@ -4,7 +4,7 @@ class nginx {
 		require => Exec['apt-get update'],
 	}
 
-	file { 'sites':
+	file { 'nginx sites':
 		path    => '/etc/nginx/sites-enabled',
 		recurse => "remote",
 		ensure  => file,
@@ -13,12 +13,12 @@ class nginx {
 		notify  => Service['nginx'],
 	}
 
-	file { 'logs permissions':
+	file { 'nginx logs permissions':
 		path    => '/var/log/nginx',
 		mode    => 777
 	}
 
-	file { 'certs':
+	file { 'nginx certs':
 		path    => '/etc/nginx/certs',
 		ensure  => file,
 		recurse => remote,

@@ -1,5 +1,9 @@
+exec { 'clean apt lists':
+	command => '/bin/rm /var/lib/apt/lists/* -vfr'
+}
 exec { 'apt-get update':
 	command => '/usr/bin/apt-get update',
+	require => Exec['clean apt lists']
 }
 
 package { 'vim':

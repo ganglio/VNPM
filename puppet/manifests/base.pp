@@ -4,6 +4,7 @@ group { 'puppet':
 
 import "lib"
 include "nginx"
+include "apache2"
 include "php-fpm"
 include "mysql"
 include "phpmyadmin"

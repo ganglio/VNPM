@@ -88,6 +88,8 @@ $cfg['Servers'][$i]['AllowNoPassword'] = FALSE;
 $cfg['UploadDir'] = '';
 $cfg['SaveDir'] = '';
 
+$cfg['LoginCookieValidity'] = 86400;
+
 /* Support additional configurations */
 foreach (glob('/etc/phpmyadmin/conf.d/*.php') as $filename)
 {
