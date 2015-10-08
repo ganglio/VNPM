@@ -1,3 +1,7 @@
+unless Vagrant.has_plugin?("vagrant-vbguest")
+	raise 'vagrant-vbguest is not installed: vagrant plugin install vagrant-vbguest'
+end
+
 Vagrant.configure("2") do |config|
 
 	config.vm.box = "ubuntu/trusty64"
@@ -18,6 +22,7 @@ Vagrant.configure("2") do |config|
 
 	# Shared DocRoot
 	config.vm.synced_folder "./htdocs", "/var/www"
+	config.vm.synced_folder "..", "/home/vagrant/Devel"
 
 	# Some VM configuration
 	config.vm.provider "virtualbox" do |v|
