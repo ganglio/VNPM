@@ -4,37 +4,40 @@ end
 
 Vagrant.configure("2") do |config|
 
-	config.vm.box = "ubuntu/trusty64"
+	config.vm.define "VNPM" do |machine|
 
-	# mysql
-	config.vm.network "forwarded_port", guest:3306, host:3306
+		machine.vm.box = "ubuntu/trusty64"
 
-	# nginx
-	config.vm.network "forwarded_port", guest:80, host:8080
-	config.vm.network "forwarded_port", guest:443, host:8443
+		# mysql
+		machine.vm.network "forwarded_port", guest:3306, host:3306
 
-	# apache
-	config.vm.network "forwarded_port", guest:81, host:8081
-	config.vm.network "forwarded_port", guest:444, host:8444
+		# nginx
+		machine.vm.network "forwarded_port", guest:80, host:8080
+		machine.vm.network "forwarded_port", guest:443, host:8443
 
-	# xdebug
-	config.vm.network "forwarded_port", guest: 9000, host: 9000
+		# apache
+		machine.vm.network "forwarded_port", guest:81, host:8081
+		machine.vm.network "forwarded_port", guest:444, host:8444
 
-	# Shared DocRoot
-	config.vm.synced_folder "./htdocs", "/var/www"
-	config.vm.synced_folder "..", "/home/vagrant/Devel"
+		# xdebug
+		machine.vm.network "forwarded_port", guest: 9000, host: 9000
 
-	# Some VM configuration
-	config.vm.provider "virtualbox" do |v|
-		v.memory = 2048
-		v.cpus = 2
-	end
+		# Shared DocRoot
+		machine.vm.synced_folder "./htdocs", "/var/www"
+		machine.vm.synced_folder "..", "/home/vagrant/Devel"
 
-	# Enable provisioning with Puppet stand alone.
+		# Some VM configuration
+		machine.vm.provider "virtualbox" do |v|
+			v.memory = 2048
+			v.cpus = 2
+		end
 
-	config.vm.provision :puppet, :module_path => "puppet/modules" do |puppet|
-		puppet.manifests_path = "puppet/manifests"
-		puppet.manifest_file  = "base.pp"
+		# Enable provisioning with Puppet stand alone.
+
+		machine.vm.provision :puppet, :module_path => "puppet/modules" do |puppet|
+			puppet.manifests_path = "puppet/manifests"
+			puppet.manifest_file  = "base.pp"
+		end
 	end
 
 end
