@@ -8,6 +8,9 @@ Vagrant.configure("2") do |config|
 
 		machine.vm.box = "ubuntu/trusty64"
 
+		config.vm.hostname = "VNPM"
+		machine.vm.network "private_network", type: "dhcp"
+
 		# mysql
 		machine.vm.network "forwarded_port", guest:3306, host:3306
 
