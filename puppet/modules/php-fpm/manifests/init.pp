@@ -4,6 +4,11 @@ class php-fpm {
 		require => Exec['apt-get update'],
 	}
 
+	package { 'php5':
+		ensure  => present,
+		require => Exec['apt-get update'],
+	}
+
 	package { 'php5-dev':
 		ensure  => present,
 		require => Exec['apt-get update'],

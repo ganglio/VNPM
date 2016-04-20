@@ -15,6 +15,7 @@ class phpmyadmin {
 			Exec['apt-get update'],
 			Package['php5-fpm'],
 			Package['php5-mysql'],
+			Package['apache2'],
 			Package['mysql-server'],
 		],
 	}

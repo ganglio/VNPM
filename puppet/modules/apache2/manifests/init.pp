@@ -2,6 +2,48 @@ class apache2 {
 	package { 'apache2':
 		ensure  => present,
 		require => Exec['apt-get update'],
+		before  => Package['apache2-mpm-itk']
+	}
+
+	exec { 'apache2 fix mpm':
+		command => '/usr/sbin/a2dismod mpm_event',
+		require => Package['apache2'],
+	}
+
+	package { 'libapache2-mpm-itk':
+		ensure  => present,
+		require => [
+			Package['apache2'],
+			Exec['apache2 fix mpm'],
+		],
+		before  => Package['apache2-mpm-itk'],
+	}
+
+	package { 'apache2-mpm-itk':
+		ensure  => present,
+		require => Package['apache2'],
+	}
+
+	package { 'libapache2-mod-php5':
+		ensure  => present,
+		require => Package['apache2'],
+		notify  => Service['apache2'],
+	}
+
+	file { 'apache2 ssl module':
+		path    => '/etc/apache2/mods-enabled/ssl.load',
+		ensure  => link,
+		require => Package['apache2'],
+		source  => '/etc/apache2/mods-available/ssl.load',
+		notify  => Service['apache2'],
+	}
+
+	file { 'apache2 rewrite module':
+		path    => '/etc/apache2/mods-enabled/rewrite.load',
+		ensure  => link,
+		require => Package['apache2'],
+		source  => '/etc/apache2/mods-available/rewrite.load',
+		notify  => Service['apache2'],
 	}
 
 	file { 'apache2 sites':
